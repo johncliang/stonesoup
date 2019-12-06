@@ -4,12 +4,17 @@ import GroupEntry from '../components/GroupEntry';
 import SearchBar from '../components/SearchBar';
 import { withNavigation } from 'react-navigation';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { f, database, auth, storage } from '../../config/config.js'
 
 const JoinFormScreen = ({ navigation }) => {
 
   const [ingredientsPick, toggleIngredients] = useState(false);
   const [cookPick, toggleCook] = useState(false)
   const [ingredientsAmount, addIngredients] = useState(1);
+  const [ingredient, setIngredient] = useState('');
+  const [quantity, setQuantity] = useState('');
+
+
 
   switchIngredients = () => {
     ingredientsPick ? toggleIngredients(false) : toggleIngredients(true);
@@ -31,6 +36,58 @@ const JoinFormScreen = ({ navigation }) => {
   const getActiveIngredientsSectionOpacity = () => {
     return ingredientsPick ? 1 : 0
   }
+
+  const handleSubmit = () => {
+    console.log("handling submit ");
+    var { currentUser } = auth;
+
+    var entry = {};
+
+    if (!ingredientsPick && !cookPick) {
+      console.log("No roles chosen");
+      return;
+    }
+    if (ingredientsPick) {
+      if (ingredient && quantity) {
+        var ingredients = new Object();
+        ingredients[ingredient] = quantity
+        entry = {ingredients:ingredients, food:"true", ...entry};
+      } else {
+        console.log("malformed ingredient entry");
+        return;
+      }
+    } else {
+      entry = {food:"false",...entry};
+    }
+    if (cookPick) {
+      entry = {cooking:"true", ... entry};
+
+    } else {
+      entry = {cooking:"false", ... entry};
+    }
+    entry = {approved:false, ...entry};
+    console.log(entry);
+
+    database.ref(`/groups/${info.gid}/members/`)
+            .child(currentUser.uid)
+            .set(entry)
+            .catch(error => console.log(error.message));
+
+    entry = {status:0, ...entry};
+    console.log('group info is');
+    console.log(navigation.state.params.group);
+    var groupInfo = navigation.state.params.group;
+    entry = {info:groupInfo, ...entry};
+    console.log(groupInfo);
+    database.ref(`/users/${currentUser.uid}/groups/`)
+            .child(info.gid)
+            .set(entry)
+            .catch(error => console.log(error.message));
+    navigation.navigate("JoinSent", params={group: info})
+
+
+  }
+
   //console.log(navigation);
   const info = navigation.getParam('group');
   return (
@@ -84,11 +141,17 @@ const JoinFormScreen = ({ navigation }) => {
           <View style={{flexDirection: 'row', justifyContent:'space-around', opacity:getActiveIngredientsSectionOpacity()}}>
             <View>
               <Text> Quantity </Text>
-              <SearchBar />
+              <SearchBar
+                term={quantity}
+                onTermChange={setQuantity}
+              />
             </View>
             <View>
               <Text> Ingredient </Text>
-              <SearchBar />
+              <SearchBar
+                term={ingredient}
+                onTermChange={setIngredient}
+              />
             </View>
 
           </View>
@@ -102,7 +165,7 @@ const JoinFormScreen = ({ navigation }) => {
               <Text style={styles.requestTextStyle}> Cancel </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("JoinSent", params={group: info})}>
+          <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.submitButtonStyle}>
               <Text style={styles.requestTextStyle}> Submit </Text>
             </View>
@@ -179,7 +242,7 @@ const styles = StyleSheet.create({
   },
   requestButtonStyle: {
     marginTop: 15,
-    backgroundColor: '#53da90',
+    backgroundColor: '#00bc74',
     height: 40,
     borderRadius: 5,
     justifyContent: 'center',
@@ -218,7 +281,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   submitButtonStyle: {
-    backgroundColor: '#53da90',
+    backgroundColor: '#00bc74',
     height: 40,
     borderRadius: 5,
   }

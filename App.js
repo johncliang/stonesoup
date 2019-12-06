@@ -11,12 +11,17 @@ import ImageScreen from './src/screens/ImageScreen';
 import CounterScreen from './src/screens/CounterScreen';
 import JoinFormScreen from './src/screens/JoinFormScreen';
 import JoinSentScreen from './src/screens/JoinSentScreen';
-import HomeScreenWithGroup from './src/screens/HomeScreenWithGroup';
-
+//import LoginScreen from './src/screens/LoginScreen';
+import SignupScreen from './src/screens/SignupScreen';
+import SignupDetailsScreen from './src/screens/SignupDetailsScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import GroupChatScreen from './src/screens/GroupChatScreen';
 
 const navigator = createStackNavigator(
   {
     Home: HomeScreen,
+    Signup: SignupScreen,
+    SignupDetails: SignupDetailsScreen,
     Components: ComponentsScreen,
     Create: CreateScreen,
     Join: JoinList,
@@ -24,7 +29,8 @@ const navigator = createStackNavigator(
     JoinSent: JoinSentScreen,
     Image: ImageScreen,
     Counter: CounterScreen,
-    HomeGroup: HomeScreenWithGroup
+    Profile: ProfileScreen,
+    GroupChat: GroupChatScreen
 
   },
   {
@@ -32,7 +38,7 @@ const navigator = createStackNavigator(
     defaultNavigationOptions: {
       title: 'Stone Soup',
       headerStyle: {
-        backgroundColor: '#53da90',
+        backgroundColor: '#00bc74',
       },
       headerTintColor: '#fff',
 

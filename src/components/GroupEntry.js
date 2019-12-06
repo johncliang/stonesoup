@@ -12,12 +12,15 @@ import SearchBar from './SearchBar';
 //when passed in, we can call navigation.getparam
 
 const GroupEntry = ({info, navigation}) => {
-
   const [activeSectionss, setSectionss] = useState([]);
   const [collapsed, toggleCollapsed] = useState(true);
 
   toggleExpanded = () => {
     collapsed ? toggleCollapsed(false) : toggleCollapsed(true);
+  };
+
+  handleRequest = () => {
+    navigation.navigate('JoinForm', params={group: info})
   };
 
 
@@ -61,7 +64,7 @@ const GroupEntry = ({info, navigation}) => {
               <Text style={styles.expandedTitleStyle}> Ingredients Contributed </Text>
               <Text style={styles.expandedIngredientsStyle}> Carrots, potatoes, corn </Text>
           </View>
-            <TouchableOpacity onPress={() => navigation.navigate('JoinForm', params={group: info})}>
+            <TouchableOpacity onPress={handleRequest}>
               <View style={styles.requestButtonStyle}>
                 <Text style={styles.requestTextStyle}> Request to Join </Text>
               </View>
@@ -125,7 +128,7 @@ const styles = StyleSheet.create({
   },
   requestButtonStyle: {
     marginTop: 15,
-    backgroundColor: '#53da90',
+    backgroundColor: '#00bc74',
     height: 40,
     borderRadius: 5,
     justifyContent: 'center',
@@ -140,3 +143,6 @@ const styles = StyleSheet.create({
 });
 
 export default withNavigation(GroupEntry);
+
+
+//<TouchableOpacity onPress={() => navigation.navigate('JoinForm', params={group: info})}>

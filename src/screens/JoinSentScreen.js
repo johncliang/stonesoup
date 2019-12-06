@@ -51,7 +51,7 @@ const JoinSentScreen = ({ navigation }) => {
 
       <View style={styles.bottomBarStyle}>
         <View style={styles.bottomSpacingStyle}>
-          <TouchableOpacity onPress={() => navigation.navigate("HomeGroup", params={group:info})}>
+          <TouchableOpacity onPress={() => navigation.navigate("Home", params={group:info})}>
             <View style={styles.requestButtonStyle}>
               <Text style={styles.requestTextStyle}> Understood </Text>
             </View>
@@ -65,7 +65,8 @@ const JoinSentScreen = ({ navigation }) => {
 JoinSentScreen.navigationOptions = () => {
   return {
     title: "Group Request",
-    headerLeft: null
+    headerLeft: null,
+    gesturesEnabled:false
   };
 };
 
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
   },
   requestButtonStyle: {
     marginTop: 15,
-    backgroundColor: '#53da90',
+    backgroundColor: '#00bc74',
     height: 40,
     borderRadius: 5,
     justifyContent: 'center',
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   submitButtonStyle: {
-    backgroundColor: '#53da90',
+    backgroundColor: '#00bc74',
     height: 40,
     borderRadius: 5,
   }
